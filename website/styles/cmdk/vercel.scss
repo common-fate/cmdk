@@ -65,10 +65,27 @@
     will-change: background, color;
     transition: all 150ms ease;
     transition-property: none;
+    position: relative;
+    width: 100%;
 
     &[data-selected='true'] {
       background: var(--grayA3);
       color: var(--gray12);
+    }
+
+    .main-group {
+      width: 100%;
+    }
+
+    #dot {
+      opacity: 0;
+    }
+    // make the #dot child element opacity 1 when data-checkbox='true' 
+    &[data-checkbox='true'] {
+      #dot {
+        color: tomato;
+        opacity: 1;
+      }
     }
 
     &[data-disabled='true'] {

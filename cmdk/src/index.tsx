@@ -79,7 +79,7 @@ type CommandProps = Children &
      */
     value?: string
     /** checked */
-    checked?: string[],
+    checked?: string[]
     /**
      * Event handler called when the selected item of the menu changes.
      */
@@ -434,6 +434,22 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
     if (item) store.setState('value', item.getAttribute(VALUE_ATTR))
   }
 
+  // checkbox handle (add or remove selected from checked array)
+  function updateSelectedToCheckbox() {
+    const selected = getSelectedItem()
+    const value = selected?.getAttribute(VALUE_ATTR)
+    const checked = state.current.checked
+
+    if (checked.includes(value)) {
+      store.setState(
+        'checked',
+        checked.filter((item) => item !== value),
+      )
+    } else {
+      store.setState('checked', [...checked, value])
+    }
+  }
+
   function updateSelectedByChange(change: 1 | -1) {
     const selected = getSelectedItem()
     const items = getValidItems()
@@ -541,6 +557,7 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
               // First item
               e.preventDefault()
               updateSelectedToIndex(0)
+
               break
             }
             case 'End': {
@@ -553,10 +570,18 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
               // Trigger item onSelect
               e.preventDefault()
               const item = getSelectedItem()
+
+              // TODO: add to checked array
+              updateSelectedToCheckbox()
+
               if (item) {
                 const event = new Event(SELECT_EVENT)
                 item.dispatchEvent(event)
               }
+            }
+            // space
+            case ' ': {
+              console.log('Space :)')
             }
           }
         }
@@ -571,6 +596,7 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
       >
         {label}
       </label>
+      {JSON.stringify(state.current.checked)}
       <StoreContext.Provider value={store}>
         <CommandContext.Provider value={context}>{children}</CommandContext.Provider>
       </StoreContext.Provider>
@@ -608,6 +634,8 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>((props, forwardedRef) =
       : state.filtered.items.get(id) > 0,
   )
 
+  const checked = useCmdk((state) => state.checked.includes(value.current))
+
   React.useEffect(() => {
     const element = ref.current
     if (!element || props.disabled) return
@@ -639,6 +667,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>((props, forwardedRef) =
       aria-selected={selected || undefined}
       data-disabled={disabled || undefined}
       data-selected={selected || undefined}
+      data-checkbox={checked || undefined}
       onPointerMove={disabled ? undefined : select}
       onClick={disabled ? undefined : onSelect}
     >

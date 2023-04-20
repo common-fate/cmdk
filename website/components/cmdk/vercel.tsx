@@ -1,5 +1,6 @@
 import React from 'react'
 import { Command } from 'cmdk'
+import targets from './example_targets.json'
 
 export function VercelCMDK() {
   const ref = React.useRef<HTMLDivElement | null>(null)
@@ -47,7 +48,6 @@ export function VercelCMDK() {
   return (
     <div className="vercel">
       <Command
-              
         ref={ref}
         onKeyDown={(e: React.KeyboardEvent) => {
           if (e.key === 'Enter') {
@@ -81,6 +81,41 @@ export function VercelCMDK() {
         />
         <Command.List>
           <Command.Empty>No results found.</Command.Empty>
+          <Command.Group heading="Permissions">
+            {targets.targets.map((target) => {
+              let key = target.targetGroupFrom.name + ' ' + target.fields.map((f) => f.value).join(' ')
+
+              return (
+                <Command.Item key={key} value={key}>
+                  {target.targetGroupFrom.name}
+                  {/* <ProviderIcon mr={2} shortType={target.targetGroupFrom.name as ShortTypes} /> */}
+                  <div className="main-group">
+                    <div>{target.fields[0].value}</div>
+                    {/* then map over the proceeding fields */}
+                    <div>
+                      {target.fields
+                        .map((field, index) => index && field.value)
+                        .filter((field) => field)
+                        .join(', ')}
+                    </div>
+                  </div>
+                  <svg
+                    id="dot"
+                    viewBox="0 0 3 3"
+                    style={{
+                      position: 'absolute',
+                      top: 12,
+                      right: 12,
+                      pointerEvents: 'none',
+                      transition: 'opacity 0.2s',
+                    }}
+                  >
+                    <circle cx="1.5" cy="1.5" r="1.5" fill="currentColor" />
+                  </svg>
+                </Command.Item>
+              )
+            })}
+          </Command.Group>
           {activePage === 'home' && <Home searchProjects={() => setPages([...pages, 'projects'])} />}
           {activePage === 'projects' && <Projects />}
         </Command.List>

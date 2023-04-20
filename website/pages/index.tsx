@@ -27,7 +27,7 @@ type Themes = 'linear' | 'raycast' | 'vercel' | 'framer'
 const ThemeContext = React.createContext<TTheme>({} as TTheme)
 
 export default function Index() {
-  const [theme, setTheme] = React.useState<Themes>('raycast')
+  const [theme, setTheme] = React.useState<Themes>('vercel')
 
   return (
     <main className={styles.main}>
@@ -39,24 +39,24 @@ export default function Index() {
             <p>Fast, composable, unstyled command menu for React.</p>
           </div>
 
-          <div className={styles.buttons}>
+          {/* <div className={styles.buttons}>
             <InstallButton />
             <GitHubButton />
-          </div>
+          </div> */}
         </div>
 
         <AnimatePresence exitBeforeEnter initial={false}>
-          {theme === 'framer' && (
+          {/* {theme === 'framer' && (
             <CMDKWrapper key="framer">
               <FramerCMDK />
             </CMDKWrapper>
-          )}
+          )} */}
           {theme === 'vercel' && (
             <CMDKWrapper key="vercel">
               <VercelCMDK />
             </CMDKWrapper>
           )}
-          {theme === 'linear' && (
+          {/* {theme === 'linear' && (
             <CMDKWrapper key="linear">
               <LinearCMDK />
             </CMDKWrapper>
@@ -65,16 +65,12 @@ export default function Index() {
             <CMDKWrapper key="raycast">
               <RaycastCMDK />
             </CMDKWrapper>
-          )}
+          )} */}
         </AnimatePresence>
 
-        <ThemeContext.Provider value={{ theme, setTheme }}>
+        {/* <ThemeContext.Provider value={{ theme, setTheme }}>
           <ThemeSwitcher />
-        </ThemeContext.Provider>
-
-        <div aria-hidden className={styles.line} />
-
-        <Codeblock />
+        </ThemeContext.Provider> */}
       </div>
       <Footer />
     </main>
