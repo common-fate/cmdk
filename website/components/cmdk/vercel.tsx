@@ -47,6 +47,7 @@ export function VercelCMDK() {
   return (
     <div className="vercel">
       <Command
+              
         ref={ref}
         onKeyDown={(e: React.KeyboardEvent) => {
           if (e.key === 'Enter') {

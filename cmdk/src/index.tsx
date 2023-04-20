@@ -78,6 +78,8 @@ type CommandProps = Children &
      * Optional controlled state of the selected command menu item.
      */
     value?: string
+    /** checked */
+    checked?: string[],
     /**
      * Event handler called when the selected item of the menu changes.
      */
@@ -103,6 +105,8 @@ type Context = {
 type State = {
   search: string
   value: string
+  // an array of checked values
+  checked: string[]
   filtered: { count: number; items: Map<string, number>; groups: Set<string> }
 }
 type Store = {
@@ -138,6 +142,7 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
     search: '',
     /** Currently selected item value. */
     value: props.value ?? '',
+    checked: props.checked ?? [],
     filtered: {
       /** The count of all visible items. */
       count: 0,
